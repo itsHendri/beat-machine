@@ -37,7 +37,7 @@ export default function App() {
   } = useSequencer()
 
   return (
-    <div className="bg-stone-50 flex justify-center p-8 pb-16">
+    <div className="bg-[#F3F6F8] flex justify-center p-8 pb-16">
       <div className="w-full max-w-4xl">
         <TransportBar
           isPlaying={isPlaying}
