@@ -42,10 +42,10 @@ export const StepButton = memo(function StepButton({
     <button
       onClick={onToggle}
       className={[
-        'w-7 h-7 rounded-md border transition-all duration-75 cursor-pointer',
+        'w-8 h-8 rounded border transition-all duration-75 cursor-pointer',
         active
           ? `${colors.active} shadow-sm`
-          : 'bg-stone-50 border-stone-200 hover:border-stone-300 hover:bg-stone-100',
+          : 'bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50',
         isCurrentStep ? colors.current : '',
       ].join(' ')}
       aria-pressed={active}
