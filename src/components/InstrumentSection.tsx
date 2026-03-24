@@ -12,11 +12,19 @@ const ICON_COLOR: Record<string, string> = {
 }
 
 const LABEL_TEXT_COLOR: Record<string, string> = {
-  orange: 'text-orange-400',
-  indigo: 'text-indigo-400',
-  violet: 'text-violet-400',
-  emerald: 'text-emerald-400',
-  rose: 'text-rose-400',
+  orange: 'text-orange-500',
+  indigo: 'text-indigo-500',
+  violet: 'text-violet-500',
+  emerald: 'text-emerald-500',
+  rose: 'text-rose-500',
+}
+
+const ACCENT_BORDER: Record<string, string> = {
+  orange: 'border-l-orange-400',
+  indigo: 'border-l-indigo-400',
+  violet: 'border-l-violet-400',
+  emerald: 'border-l-emerald-400',
+  rose: 'border-l-rose-400',
 }
 
 const SLIDER_COLOR: Record<string, string> = {
@@ -71,50 +79,48 @@ export const InstrumentSection = memo(function InstrumentSection({
 }: InstrumentSectionProps) {
   const color = INSTRUMENT_COLORS[instrument]
   const iconClass = ICON_COLOR[color] ?? 'text-stone-400'
-  const labelClass = LABEL_TEXT_COLOR[color] ?? 'text-stone-400'
+  const labelClass = LABEL_TEXT_COLOR[color] ?? 'text-stone-500'
   const sliderClass = SLIDER_COLOR[color] ?? 'accent-stone-400'
+  const accentClass = ACCENT_BORDER[color] ?? 'border-l-stone-300'
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Header: icon + name + copy/paste left, randomize + clear right */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <div className={`bg-white rounded-xl border border-stone-100 border-l-4 ${accentClass} p-4 sm:p-5 flex flex-col gap-3 shadow-sm`}>
+      {/* Header */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className={iconClass}>
             <InstrumentIcon instrument={instrument} />
           </span>
-          <span
-            className={`text-base font-semibold uppercase tracking-[1px] select-none ${labelClass}`}
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
+          <span className={`text-sm font-bold uppercase tracking-widest select-none ${labelClass}`}>
             {INSTRUMENT_LABELS[instrument]}
           </span>
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
           <button
             onClick={() => onCopy(instrument)}
-            className="border border-stone-200 rounded-full px-3 py-1 text-xs font-medium text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none flex items-center gap-1"
+            className="border border-stone-200 rounded-full px-2.5 py-1 text-xs font-medium text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none flex items-center gap-1"
           >
-            <Copy size={11} />
+            <Copy size={10} />
             Copy
           </button>
           <button
             onClick={() => onPaste(instrument)}
             disabled={!canPaste}
-            className="border border-stone-200 rounded-full px-3 py-1 text-xs font-medium transition-colors select-none disabled:opacity-30 disabled:cursor-not-allowed text-stone-400 hover:border-stone-300 hover:text-stone-600 disabled:hover:border-stone-200 disabled:hover:text-stone-400 flex items-center gap-1"
+            className="border border-stone-200 rounded-full px-2.5 py-1 text-xs font-medium transition-colors select-none disabled:opacity-30 disabled:cursor-not-allowed text-stone-400 hover:border-stone-300 hover:text-stone-600 disabled:hover:border-stone-200 disabled:hover:text-stone-400 flex items-center gap-1"
           >
-            <ClipboardPaste size={11} />
+            <ClipboardPaste size={10} />
             Paste
           </button>
-        </div>
-        <div className="flex items-center gap-2">
           <button
             onClick={() => onRandomize(instrument)}
-            className="border border-stone-200 rounded-full px-4 py-1.5 text-xs font-medium text-stone-500 hover:border-stone-300 hover:text-stone-700 transition-colors select-none flex items-center gap-1.5"
+            className="border border-stone-200 rounded-full px-2.5 py-1 text-xs font-medium text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none flex items-center gap-1"
           >
-            <Shuffle size={11} />
+            <Shuffle size={10} />
             Randomize
           </button>
           <button
             onClick={() => onClear(instrument)}
-            className="border border-stone-200 rounded-full px-4 py-1.5 text-xs font-medium text-stone-500 hover:border-stone-300 hover:text-stone-700 transition-colors select-none"
+            className="border border-stone-200 rounded-full px-2.5 py-1 text-xs font-medium text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none"
           >
             Clear
           </button>
@@ -122,15 +128,15 @@ export const InstrumentSection = memo(function InstrumentSection({
       </div>
 
       {/* Sound shape sliders: Filter, Reverb, Drive */}
-      <div className="flex items-center gap-6">
-        <span className="w-14 shrink-0" /> {/* align with row labels */}
+      <div className="flex items-center gap-4 overflow-x-auto">
+        <span className="w-14 shrink-0" />
         {([
           ['filterFreq', 'Filter'] as const,
           ['reverbWet',  'Reverb'] as const,
           ['drive',      'Drive' ] as const,
         ]).map(([param, label]) => (
-          <label key={param} className="flex items-center gap-2 flex-1 min-w-0">
-            <span className="text-[10px] font-medium text-stone-400 w-9 shrink-0 select-none">{label}</span>
+          <label key={param} className="flex items-center gap-2 flex-1 min-w-[80px]">
+            <span className="text-[10px] font-medium text-stone-400 w-8 shrink-0 select-none">{label}</span>
             <input
               type="range"
               min={0}
@@ -144,26 +150,26 @@ export const InstrumentSection = memo(function InstrumentSection({
         ))}
       </div>
 
-      {/* Step rows */}
-      <div className="flex flex-col gap-2">
-        {rows.map((stepRow, rowIndex) => (
-          <TrackRow
-            key={rowIndex}
-            instrument={instrument}
-            row={rowIndex}
-            label={ROW_LABELS[instrument][rowIndex]}
-            steps={stepRow}
-            currentStep={currentStep}
-            onToggle={onToggle}
-          />
-        ))}
+      {/* Step rows — scrollable on small screens */}
+      <div className="overflow-x-auto -mx-1 px-1">
+        <div className="flex flex-col gap-1.5 min-w-max">
+          {rows.map((stepRow, rowIndex) => (
+            <TrackRow
+              key={rowIndex}
+              instrument={instrument}
+              row={rowIndex}
+              label={ROW_LABELS[instrument][rowIndex]}
+              steps={stepRow}
+              currentStep={currentStep}
+              onToggle={onToggle}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Volume slider — horizontal at bottom */}
+      {/* Volume slider */}
       <div className="flex items-center gap-2">
-        <span className="w-14 text-right text-xs text-stone-400 shrink-0 select-none" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 500 }}>
-          Vol
-        </span>
+        <span className="w-14 text-right text-xs font-medium text-stone-400 shrink-0 select-none">Vol</span>
         <input
           type="range"
           min={0}
