@@ -30,8 +30,9 @@ export function TransportBar({
   onGenreSelect,
 }: TransportBarProps) {
   return (
-    <div className="flex flex-col items-center gap-3 pb-8">
-    <div className="flex flex-wrap items-center justify-center gap-5">
+    <div className="sticky top-4 z-10 mb-8">
+    <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-stone-100 shadow-sm px-6 py-4 flex flex-col items-center gap-3">
+    <div className="flex flex-wrap items-center justify-center gap-4">
       {/* Play / Stop */}
       <button
         onClick={onTogglePlay}
@@ -120,22 +121,23 @@ export function TransportBar({
     </div>
 
     {/* Genre pills */}
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 flex-wrap justify-center">
       <span className="text-xs text-stone-400 select-none">Style:</span>
       {GENRES.map((g) => (
         <button
           key={g}
           onClick={() => onGenreSelect(g)}
           className={[
-            'px-3 py-1 rounded-full text-xs font-medium capitalize transition-colors',
+            'px-3 py-1 rounded-full text-xs font-medium capitalize transition-all',
             activeGenre === g
-              ? 'bg-stone-800 text-white'
+              ? 'bg-stone-800 text-white shadow-sm'
               : 'bg-stone-100 text-stone-500 hover:bg-stone-200',
           ].join(' ')}
         >
           {g}
         </button>
       ))}
+    </div>
     </div>
     </div>
   )

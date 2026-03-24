@@ -32,28 +32,24 @@ export const SequencerGrid = memo(function SequencerGrid({
   canPaste,
 }: SequencerGridProps) {
   return (
-    <div className="flex flex-col gap-4">
-      {INSTRUMENTS.map((inst, i) => (
-        <div key={inst}>
-          <InstrumentSection
-            instrument={inst}
-            rows={pattern[inst]}
-            currentStep={currentStep}
-            volume={instrumentVolumes[inst]}
-            sound={instrumentSounds[inst]}
-            onToggle={onToggle}
-            onVolumeChange={onInstrumentVolumeChange}
-            onSoundChange={onInstrumentSoundChange}
-            onClear={onClearInstrument}
-            onRandomize={onRandomizeInstrument}
-            onCopy={onCopyInstrument}
-            onPaste={onPasteInstrument}
-            canPaste={canPaste}
-          />
-          {i < INSTRUMENTS.length - 1 && (
-            <div className="mt-4 border-t border-stone-100" />
-          )}
-        </div>
+    <div className="flex flex-col gap-3">
+      {INSTRUMENTS.map((inst) => (
+        <InstrumentSection
+          key={inst}
+          instrument={inst}
+          rows={pattern[inst]}
+          currentStep={currentStep}
+          volume={instrumentVolumes[inst]}
+          sound={instrumentSounds[inst]}
+          onToggle={onToggle}
+          onVolumeChange={onInstrumentVolumeChange}
+          onSoundChange={onInstrumentSoundChange}
+          onClear={onClearInstrument}
+          onRandomize={onRandomizeInstrument}
+          onCopy={onCopyInstrument}
+          onPaste={onPasteInstrument}
+          canPaste={canPaste}
+        />
       ))}
     </div>
   )

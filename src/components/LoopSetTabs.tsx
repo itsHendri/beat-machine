@@ -28,9 +28,9 @@ export const LoopSetTabs = memo(function LoopSetTabs({
   onToggleMute,
 }: LoopSetTabsProps) {
   return (
-    <div className="flex flex-col gap-2 mb-8">
+    <div className="flex flex-col gap-2 mb-6">
       {/* Tab row */}
-      <div className="flex">
+      <div className="flex bg-white rounded-xl border border-stone-100 overflow-hidden shadow-sm">
         {loopSets.map((set, i) => {
           const isActiveEdit = i === activeEditIndex
           const isCurrentlyPlaying = isPlaying && i === currentPlayingIndex
@@ -40,25 +40,22 @@ export const LoopSetTabs = memo(function LoopSetTabs({
               key={i}
               onClick={() => onSelectTab(i)}
               className={[
-                'flex-1 flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-medium transition-colors select-none',
+                'flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold transition-all select-none',
                 set.muted ? 'opacity-40' : '',
                 isActiveEdit
-                  ? 'text-stone-800 border-b border-stone-800'
-                  : 'text-stone-400 border-b border-stone-200 hover:text-stone-600',
+                  ? 'bg-stone-800 text-white'
+                  : 'text-stone-400 hover:text-stone-600 hover:bg-stone-50',
               ].join(' ')}
             >
-              {/* Playing indicator dot — only when synced */}
               {isCurrentlyPlaying && !set.muted && (
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0 animate-pulse" />
               )}
-              {/* Spacer to keep label centred when no dot */}
               {(!isCurrentlyPlaying || set.muted) && isPlaying && (
                 <span className="w-1.5 h-1.5 shrink-0" />
               )}
-              Loop Set {i + 1}
-              {/* Has-steps dot when not playing */}
+              Loop {i + 1}
               {hasActiveSteps(set) && !isCurrentlyPlaying && (
-                <span className="w-1.5 h-1.5 rounded-full bg-stone-300 shrink-0" />
+                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActiveEdit ? 'bg-white/40' : 'bg-stone-300'}`} />
               )}
             </button>
           )
@@ -66,21 +63,19 @@ export const LoopSetTabs = memo(function LoopSetTabs({
       </div>
 
       {/* Qty + mute row */}
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         {loopSets.map((set, i) => {
           const hasSteps = hasActiveSteps(set)
           return (
             <div
               key={i}
               className={[
-                'flex-1 flex items-center gap-2 px-3 py-2 border rounded-lg text-xs transition-all',
+                'flex-1 flex items-center gap-1.5 px-3 py-2 bg-white border rounded-lg text-xs transition-all shadow-sm',
                 set.muted ? 'opacity-40' : '',
-                hasSteps
-                  ? 'border-stone-200 text-stone-700'
-                  : 'border-stone-100 text-stone-300',
+                hasSteps ? 'border-stone-200' : 'border-stone-100',
               ].join(' ')}
             >
-              <span className={hasSteps ? 'text-stone-400' : 'text-stone-300'}>Qty:</span>
+              <span className="text-stone-300 text-[10px] font-medium select-none">×</span>
               <button
                 onClick={() => onSetQty(i, set.qty - 1)}
                 disabled={set.qty <= 1}
@@ -88,7 +83,7 @@ export const LoopSetTabs = memo(function LoopSetTabs({
               >
                 −
               </button>
-              <span className={['flex-1 text-center font-medium', hasSteps ? 'text-stone-800' : 'text-stone-300'].join(' ')}>
+              <span className={['flex-1 text-center font-semibold tabular-nums', hasSteps ? 'text-stone-700' : 'text-stone-300'].join(' ')}>
                 {set.qty}
               </span>
               <button
@@ -97,8 +92,6 @@ export const LoopSetTabs = memo(function LoopSetTabs({
               >
                 +
               </button>
-
-              {/* Mute toggle */}
               <button
                 onClick={() => onToggleMute(i)}
                 title={set.muted ? 'Unmute loop set' : 'Mute loop set'}
@@ -109,10 +102,7 @@ export const LoopSetTabs = memo(function LoopSetTabs({
                     : 'text-stone-300 hover:text-stone-500',
                 ].join(' ')}
               >
-                {set.muted
-                  ? <PlayCircle size={14} />
-                  : <PauseCircle size={14} />
-                }
+                {set.muted ? <PlayCircle size={13} /> : <PauseCircle size={13} />}
               </button>
             </div>
           )
