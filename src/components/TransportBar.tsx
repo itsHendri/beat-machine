@@ -36,15 +36,15 @@ export function TransportBar({
       <button
         onClick={onTogglePlay}
         className={[
-          'flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all',
+          'flex items-center gap-2.5 px-7 py-3 rounded-full text-base font-bold transition-all shadow-md active:scale-95',
           isPlaying
-            ? 'bg-stone-800 text-white hover:bg-stone-700'
-            : 'bg-stone-100 text-stone-700 hover:bg-stone-200',
+            ? 'bg-red-500 text-white hover:bg-red-600 shadow-red-200'
+            : 'bg-black text-white hover:bg-stone-800 shadow-stone-300',
         ].join(' ')}
       >
         {isPlaying ? (
           <>
-            <svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+            <svg width="11" height="11" viewBox="0 0 9 9" fill="currentColor">
               <rect x="0" y="0" width="3" height="9" rx="1" />
               <rect x="6" y="0" width="3" height="9" rx="1" />
             </svg>
@@ -52,7 +52,7 @@ export function TransportBar({
           </>
         ) : (
           <>
-            <svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor">
+            <svg width="11" height="11" viewBox="0 0 9 9" fill="currentColor">
               <polygon points="0,0 9,4.5 0,9" />
             </svg>
             Play
