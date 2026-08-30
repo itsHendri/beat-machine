@@ -42,7 +42,7 @@ export const StepButton = memo(function StepButton({
     <button
       onClick={onToggle}
       className={[
-        'w-8 h-8 rounded border transition-all duration-75 cursor-pointer',
+        'flex-1 aspect-square min-w-0 rounded border transition-all duration-75 cursor-pointer',
         active
           ? `${colors.active} shadow-sm`
           : 'bg-white border-stone-200 hover:border-stone-300 hover:bg-stone-50',

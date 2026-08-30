@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -36,4 +36,13 @@ input[type='range']::-webkit-slider-thumb {
 
 input[type='range']::-webkit-slider-thumb:hover {
   background: #44403c;
+}
+
+/* Respect user motion preferences (motion-design: non-negotiable) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

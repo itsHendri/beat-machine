@@ -82,26 +82,24 @@ export const InstrumentSection = memo(function InstrumentSection({
           <span className={iconClass}>
             <InstrumentIcon instrument={instrument} />
           </span>
-          <span
-            className={`text-base font-semibold uppercase tracking-[1px] select-none ${labelClass}`}
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
+          <span className={`text-base font-semibold uppercase tracking-[1px] select-none ${labelClass}`}>
             {INSTRUMENT_LABELS[instrument]}
           </span>
+          {/* Icon-only — aria-label required (accessibility skill: icon-only buttons) */}
           <button
             onClick={() => onCopy(instrument)}
-            className="border border-stone-200 rounded-full px-3 py-1 text-xs font-medium text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none flex items-center gap-1"
+            aria-label={`Copy ${INSTRUMENT_LABELS[instrument]} pattern`}
+            className="border border-stone-200 rounded-full w-9 h-9 text-stone-400 hover:border-stone-300 hover:text-stone-600 transition-colors select-none flex items-center justify-center"
           >
-            <Copy size={11} />
-            Copy
+            <Copy size={12} aria-hidden="true" />
           </button>
           <button
             onClick={() => onPaste(instrument)}
             disabled={!canPaste}
-            className="border border-stone-200 rounded-full px-3 py-1 text-xs font-medium transition-colors select-none disabled:opacity-30 disabled:cursor-not-allowed text-stone-400 hover:border-stone-300 hover:text-stone-600 disabled:hover:border-stone-200 disabled:hover:text-stone-400 flex items-center gap-1"
+            aria-label={canPaste ? `Paste to ${INSTRUMENT_LABELS[instrument]}` : 'Nothing copied yet'}
+            className="border border-stone-200 rounded-full w-9 h-9 transition-colors select-none disabled:opacity-30 disabled:cursor-not-allowed text-stone-400 hover:border-stone-300 hover:text-stone-600 disabled:hover:border-stone-200 disabled:hover:text-stone-400 flex items-center justify-center"
           >
-            <ClipboardPaste size={11} />
-            Paste
+            <ClipboardPaste size={12} aria-hidden="true" />
           </button>
         </div>
         <div className="flex items-center gap-2">
@@ -121,21 +119,24 @@ export const InstrumentSection = memo(function InstrumentSection({
         </div>
       </div>
 
-      {/* Sound shape sliders: Filter, Reverb, Drive */}
+      {/* Sound shape sliders: Filter, Reverb, Drive — values shown inline (motion-design: feedback) */}
       <div className="flex items-center gap-6">
         <span className="w-14 shrink-0" /> {/* align with row labels */}
         {([
-          ['filterFreq', 'Filter'] as const,
-          ['reverbWet',  'Reverb'] as const,
-          ['drive',      'Drive' ] as const,
-        ]).map(([param, label]) => (
+          ['filterFreq', 'Filter', 'Brightness — left: dark, right: bright'] as const,
+          ['reverbWet',  'Reverb', 'Space — left: dry, right: wet'         ] as const,
+          ['drive',      'Drive',  'Distortion — left: clean, right: gritty'] as const,
+        ]).map(([param, label, description]) => (
           <label key={param} className="flex items-center gap-2 flex-1 min-w-0">
-            <span className="text-[10px] font-medium text-stone-400 w-9 shrink-0 select-none">{label}</span>
+            <span className="text-xs font-medium text-stone-500 w-14 shrink-0 select-none tabular-nums">
+              {label} <span className="text-stone-300">{sound[param]}</span>
+            </span>
             <input
               type="range"
               min={0}
               max={100}
               value={sound[param]}
+              aria-label={`${INSTRUMENT_LABELS[instrument]} ${label}: ${description}`}
               onChange={(e) => onSoundChange(instrument, param, Number(e.target.value))}
               className={`flex-1 cursor-pointer ${sliderClass}`}
               style={{ height: 2 }}
@@ -161,17 +162,17 @@ export const InstrumentSection = memo(function InstrumentSection({
 
       {/* Volume slider — horizontal at bottom */}
       <div className="flex items-center gap-2">
-        <span className="w-14 text-right text-xs text-stone-400 shrink-0 select-none" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 500 }}>
-          Vol
+        <span className="w-14 text-right text-xs font-medium text-stone-400 shrink-0 select-none tabular-nums">
+          Vol <span className="text-stone-300">{volume}</span>
         </span>
         <input
           type="range"
           min={0}
           max={100}
           value={volume}
+          aria-label={`${INSTRUMENT_LABELS[instrument]} volume`}
           onChange={(e) => onVolumeChange(instrument, Number(e.target.value))}
           className={`flex-1 cursor-pointer ${sliderClass}`}
-          title={`${INSTRUMENT_LABELS[instrument]} volume: ${volume}`}
         />
       </div>
     </div>

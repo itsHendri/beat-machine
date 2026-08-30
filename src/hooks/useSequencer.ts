@@ -36,6 +36,7 @@ export function useSequencer() {
     () => Object.fromEntries(INSTRUMENTS.map((i) => [i, { ...DEFAULT_SOUND }])) as Record<InstrumentName, InstrumentSound>
   )
   const [currentStep, setCurrentStep] = useState(-1)
+  const [isRecording, setIsRecording] = useState(false)
 
   const loopSetsRef = useRef<LoopSet[]>(loopSets)
   useEffect(() => { loopSetsRef.current = loopSets }, [loopSets])
@@ -212,6 +213,23 @@ export function useSequencer() {
     })
   }, [activeEditIndex])
 
+  const startRecording = useCallback(async () => {
+    await engineRef.current?.startRecording()
+    setIsRecording(true)
+  }, [])
+
+  const stopRecording = useCallback(async () => {
+    const blob = await engineRef.current?.stopRecording()
+    setIsRecording(false)
+    if (!blob) return
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'beat-machine.webm'
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [])
+
   // Safe pattern accessor for the currently edited loop set
   const activePattern = loopSets[activeEditIndex]?.pattern ?? emptyGrid()
   const safePattern: PatternGrid = Object.fromEntries(
@@ -253,5 +271,8 @@ export function useSequencer() {
     clipboard,
     copyInstrument,
     pasteInstrument,
+    isRecording,
+    startRecording,
+    stopRecording,
   }
 }

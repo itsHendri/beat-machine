@@ -51,7 +51,7 @@ export const SequencerGrid = memo(function SequencerGrid({
             canPaste={canPaste}
           />
           {i < INSTRUMENTS.length - 1 && (
-            <div className="mt-4 border-t border-stone-100" />
+            <div className="mt-4 border-t border-stone-200" />
           )}
         </div>
       ))}
