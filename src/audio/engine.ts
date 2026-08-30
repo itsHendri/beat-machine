@@ -29,6 +29,7 @@ export class AudioEngine {
   private reverbNodes: Map<InstrumentName, Tone.Reverb> = new Map()
   private driveNodes:  Map<InstrumentName, Tone.Distortion> = new Map()
   private sequence: Tone.Sequence<number> | null = null
+  private recorder: Tone.Recorder | null = null
   private initialized = false
   private onStep: ((step: number) => void) | null = null
 
@@ -163,6 +164,21 @@ export class AudioEngine {
   setInstrumentDrive(inst: InstrumentName, value: number): void {
     const node = this.driveNodes.get(inst)
     if (node) node.wet.value = this.wetFromSlider(value)
+  }
+
+  async startRecording(): Promise<void> {
+    this.recorder = new Tone.Recorder()
+    Tone.getDestination().connect(this.recorder)
+    await this.recorder.start()
+  }
+
+  async stopRecording(): Promise<Blob> {
+    if (!this.recorder) throw new Error('Not recording')
+    const blob = await this.recorder.stop()
+    Tone.getDestination().disconnect(this.recorder)
+    this.recorder.dispose()
+    this.recorder = null
+    return blob
   }
 
   applyGenrePreset(preset: Record<InstrumentName, InstrumentSound>): void {
